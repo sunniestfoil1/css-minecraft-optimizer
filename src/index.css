@@ -1,101 +1,170 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Minecraft:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 8% 6%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 210 8% 8%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 210 8% 10%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 143 71% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 8% 14%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 8% 12%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 143 71% 45%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 210 8% 12%;
+    --input: 210 8% 12%;
+    --ring: 143 71% 45%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased overflow-hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #root {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .minecraft-btn {
+    @apply relative inline-flex items-center justify-center px-6 py-2 font-medium tracking-wide text-white transition-all duration-300 ease-in-out;
+    background-color: #5dc21e;
+    border: 2px solid #3a7113;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 
+                inset 0 10px rgba(255, 255, 255, 0.2), 
+                inset 0 10px 20px rgba(255, 255, 255, 0.25), 
+                inset 0 -15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .minecraft-btn:hover {
+    @apply transform transition-all;
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 
+                inset 0 10px rgba(255, 255, 255, 0.2), 
+                inset 0 10px 20px rgba(255, 255, 255, 0.25), 
+                inset 0 -15px 30px rgba(0, 0, 0, 0.3),
+                0 5px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  .minecraft-btn:active {
+    transform: translateY(0px);
+    filter: brightness(0.9);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 
+                inset 0 10px rgba(255, 255, 255, 0.2), 
+                inset 0 10px 20px rgba(255, 255, 255, 0.25), 
+                inset 0 -5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-panel {
+    @apply rounded-lg backdrop-blur-lg bg-glass-background border border-glass-border transition-all duration-300;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  .glass-panel:hover {
+    @apply bg-glass-hover;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-panel-header {
+    @apply p-4 border-b border-glass-border flex items-center justify-between;
+    background: linear-gradient(to right, rgba(40, 40, 40, 0.6), rgba(20, 20, 20, 0.4));
+  }
+
+  .card-glow {
+    @apply relative overflow-hidden;
+  }
+
+  .card-glow::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at center,
+      rgba(93, 194, 30, 0.1) 0%,
+      rgba(93, 194, 30, 0) 70%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .card-glow:hover::before {
+    opacity: 1;
+  }
+
+  .shimmer-effect {
+    @apply relative overflow-hidden;
+    background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0.0) 0%, 
+      rgba(255, 255, 255, 0.15) 50%, 
+      rgba(255, 255, 255, 0.0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+  }
+
+  .btn-hover-slide {
+    @apply relative overflow-hidden;
+  }
+
+  .btn-hover-slide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0) 0%, 
+      rgba(255, 255, 255, 0.2) 50%, 
+      rgba(255, 255, 255, 0) 100%);
+    transition: all 0.5s ease;
+  }
+
+  .btn-hover-slide:hover::after {
+    left: 100%;
   }
 }
