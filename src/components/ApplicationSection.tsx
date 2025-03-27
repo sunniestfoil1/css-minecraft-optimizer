@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AppFile {
   id: number;
@@ -9,19 +10,49 @@ interface AppFile {
 }
 
 const ApplicationSection: React.FC = () => {
-  // Mock data - in a real app, this would come from scanning the files folder
-  const appFiles: AppFile[] = [
-    { id: 1, name: "1.exe" },
-    { id: 2, name: "2.exe" },
-    { id: 3, name: "3.exe" },
-    { id: 4, name: "4.exe" },
-    { id: 5, name: "5.exe" },
-  ];
+  const [appFiles, setAppFiles] = useState<AppFile[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // If running in Electron, use the API to list files
+    if (window.electron) {
+      const files = window.electron.listFiles('.exe');
+      const mappedFiles = files.map((name, index) => ({
+        id: index + 1,
+        name
+      }));
+      setAppFiles(mappedFiles);
+    } else {
+      // Fallback to mock data when not running in Electron
+      setAppFiles([
+        { id: 1, name: "1.exe" },
+        { id: 2, name: "2.exe" },
+        { id: 3, name: "3.exe" },
+        { id: 4, name: "4.exe" },
+        { id: 5, name: "5.exe" },
+      ]);
+    }
+  }, []);
 
   const handleRunApp = (app: AppFile) => {
-    // In a real desktop app, this would execute the .exe file
     console.log(`Launching ${app.name}`);
-    // Placeholder for actual execution logic
+    
+    // If running in Electron, use the API to run the executable
+    if (window.electron) {
+      const success = window.electron.runExecutable(app.name);
+      if (success) {
+        toast({
+          title: "Application Launched",
+          description: `Started ${app.name}`,
+        });
+      } else {
+        toast({
+          title: "Launch Failed",
+          description: `Failed to start ${app.name}`,
+          variant: "destructive"
+        });
+      }
+    }
   };
 
   return (

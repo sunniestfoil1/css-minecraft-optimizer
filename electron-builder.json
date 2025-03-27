@@ -1,0 +1,30 @@
+
+{
+  "appId": "com.minecraft.optimizer",
+  "productName": "Minecraft Optimizer",
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+    "dist/**/*",
+    "electron/**/*"
+  ],
+  "extraResources": [
+    {
+      "from": "files",
+      "to": "files",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "icon": "public/favicon.ico",
+    "target": [
+      "nsis"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true
+  }
+}

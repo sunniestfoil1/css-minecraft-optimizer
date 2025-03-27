@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,24 +10,54 @@ interface BatchFile {
 }
 
 const BatchOptimizationSection: React.FC = () => {
+  const [batchFiles, setBatchFiles] = useState<BatchFile[]>([]);
   const { toast } = useToast();
-  // Mock data - in a real app, this would come from scanning the files folder
-  const batchFiles: BatchFile[] = [
-    { id: 1, name: "1.bat" },
-    { id: 2, name: "2.bat" },
-    { id: 3, name: "3.bat" },
-    { id: 4, name: "4.bat" },
-    { id: 5, name: "5.bat" },
-  ];
+
+  useEffect(() => {
+    // If running in Electron, use the API to list files
+    if (window.electron) {
+      const files = window.electron.listFiles('.bat');
+      const mappedFiles = files.map((name, index) => ({
+        id: index + 1,
+        name
+      }));
+      setBatchFiles(mappedFiles);
+    } else {
+      // Fallback to mock data when not running in Electron
+      setBatchFiles([
+        { id: 1, name: "1.bat" },
+        { id: 2, name: "2.bat" },
+        { id: 3, name: "3.bat" },
+        { id: 4, name: "4.bat" },
+        { id: 5, name: "5.bat" },
+      ]);
+    }
+  }, []);
 
   const handleRunBatch = (batch: BatchFile) => {
-    // In a real desktop app, this would execute the .bat file
     console.log(`Running ${batch.name}`);
-    // Placeholder for actual execution logic
-    toast({
-      title: "Batch Script Execution",
-      description: `Started ${batch.name}`,
-    });
+    
+    // If running in Electron, use the API to run the batch file
+    if (window.electron) {
+      const success = window.electron.runBatchFile(batch.name);
+      if (success) {
+        toast({
+          title: "Batch Script Execution",
+          description: `Started ${batch.name}`,
+        });
+      } else {
+        toast({
+          title: "Execution Failed",
+          description: `Failed to run ${batch.name}`,
+          variant: "destructive"
+        });
+      }
+    } else {
+      toast({
+        title: "Batch Script Execution",
+        description: `Started ${batch.name}`,
+      });
+    }
   };
 
   return (
