@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
@@ -7,28 +7,57 @@ import { useToast } from "@/components/ui/use-toast";
 interface PowerPlan {
   id: number;
   name: string;
-  description: string;
 }
 
 const PowerPlansSection: React.FC = () => {
+  const [powerPlans, setPowerPlans] = useState<PowerPlan[]>([]);
   const { toast } = useToast();
-  
-  // Mock data - in a real app, this would come from scanning the files folder
-  const powerPlans: PowerPlan[] = [
-    { id: 1, name: "Ultimate Performance", description: "Maximum performance for gaming" },
-    { id: 2, name: "High Performance", description: "Optimized for high FPS" },
-    { id: 3, name: "Balanced Gaming", description: "Balance between performance and battery" },
-    { id: 4, name: "Battery Saver", description: "For laptop gaming on battery" },
-  ];
 
-  const handleActivatePlan = (plan: PowerPlan) => {
-    // In a real desktop app, this would activate the power plan
-    console.log(`Activating ${plan.name}`);
-    // Placeholder for actual activation logic
-    toast({
-      title: "Power Plan Activated",
-      description: `${plan.name} power plan is now active`,
-    });
+  useEffect(() => {
+    // If running in Electron, use the API to list files
+    if (window.electron) {
+      const files = window.electron.listFiles('.pow');
+      const mappedFiles = files.map((name, index) => ({
+        id: index + 1,
+        name
+      }));
+      setPowerPlans(mappedFiles);
+    } else {
+      // Fallback to mock data when not running in Electron
+      setPowerPlans([
+        { id: 1, name: "HighPerformance.pow" },
+        { id: 2, name: "Balanced.pow" },
+        { id: 3, name: "PowerSaver.pow" },
+        { id: 4, name: "Ultimate.pow" },
+        { id: 5, name: "Gaming.pow" },
+      ]);
+    }
+  }, []);
+
+  const handleApplyPowerPlan = (plan: PowerPlan) => {
+    console.log(`Applying power plan: ${plan.name}`);
+    
+    // If running in Electron, use the API to apply the power plan
+    if (window.electron) {
+      const result = window.electron.runPowerPlan(plan.name);
+      if (result.success) {
+        toast({
+          title: "Power Plan Applied",
+          description: `Activated ${plan.name}`,
+        });
+      } else {
+        toast({
+          title: "Application Failed",
+          description: result.error || `Failed to apply ${plan.name}`,
+          variant: "destructive"
+        });
+      }
+    } else {
+      toast({
+        title: "Power Plan Applied",
+        description: `Activated ${plan.name} (simulation)`,
+      });
+    }
   };
 
   return (
@@ -37,28 +66,34 @@ const PowerPlansSection: React.FC = () => {
         <CardTitle className="text-white">Power Plans</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {powerPlans.map((plan) => (
-            <div 
+            <Button
               key={plan.id}
-              className="p-4 bg-black/30 rounded-lg border border-glass-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+              onClick={() => handleApplyPowerPlan(plan)}
+              className="minecraft-btn btn-hover-slide h-auto py-4 flex flex-col items-center space-y-2"
+              style={{ 
+                backgroundColor: '#8E44AD',
+                borderColor: '#6C3483'
+              }}
             >
-              <div className="text-left">
-                <h3 className="text-lg font-medium text-white">{plan.name}</h3>
-                <p className="text-sm text-gray-400">{plan.description}</p>
-              </div>
-              <Button 
-                onClick={() => handleActivatePlan(plan)}
-                className="minecraft-btn btn-hover-slide"
-                style={{ 
-                  backgroundColor: '#5dc21e',
-                  borderColor: '#3a7113'
-                }}
-              >
-                Activate
-              </Button>
-            </div>
+              <div className="text-2xl">⚡</div>
+              <span>{plan.name}</span>
+            </Button>
           ))}
+        </div>
+        
+        <div className="mt-6 p-4 bg-black/30 rounded-md border border-glass-border">
+          <h3 className="text-sm font-medium text-white mb-2">About Power Plans:</h3>
+          <p className="text-xs text-gray-300">
+            Power plans in Windows determine how your computer uses power. For gaming, 
+            a High Performance plan is recommended. The Ultimate and Gaming plans are 
+            custom plans optimized for Minecraft performance.
+          </p>
+          <div className="mt-3 p-2 bg-yellow-900/30 text-yellow-200 rounded-md text-xs">
+            <strong>Note:</strong> Applying power plans requires administrator privileges. 
+            If you encounter issues, try running the application as administrator.
+          </div>
         </div>
       </CardContent>
     </Card>

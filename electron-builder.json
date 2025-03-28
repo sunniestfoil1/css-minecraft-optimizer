@@ -20,11 +20,14 @@
     "icon": "public/favicon.ico",
     "target": [
       "nsis"
-    ]
+    ],
+    "artifactName": "${productName}-Setup-${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
-    "createDesktopShortcut": true
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Minecraft Optimizer"
   }
 }

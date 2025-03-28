@@ -1,10 +1,20 @@
 
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, dialog } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const os = require('os');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling
 if (require('electron-squirrel-startup')) {
+  app.quit();
+}
+
+// Check if running on Windows
+if (os.platform() !== 'win32') {
+  dialog.showErrorBox(
+    'Unsupported Operating System',
+    'This application only runs on Windows 10 and Windows 11.'
+  );
   app.quit();
 }
 
@@ -16,8 +26,8 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
     // Remove frame for a more custom UI feel

@@ -5,6 +5,7 @@ import ClientConfigSection from './ClientConfigSection';
 import BatchOptimizationSection from './BatchOptimizationSection';
 import HardwareOptimizationSection from './HardwareOptimizationSection';
 import PowerPlansSection from './PowerPlansSection';
+import SystemInfoPanel from './SystemInfoPanel';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('apps');
@@ -93,13 +94,14 @@ const Dashboard: React.FC = () => {
       
       <main className="flex-1 overflow-auto p-6 bg-background">
         <div className="container mx-auto animate-fade-in">
+          <SystemInfoPanel />
           {renderTabContent()}
         </div>
       </main>
       
       <footer className="bg-glass-background backdrop-blur-md border-t border-glass-border p-3">
         <div className="container mx-auto text-center text-xs text-gray-500">
-          Minecraft Optimizer v1.0.0 | Run locally for optimal performance
+          Minecraft Optimizer v1.0.0 | For Windows 10/11 Only
         </div>
       </footer>
     </div>
