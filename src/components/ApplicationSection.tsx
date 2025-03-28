@@ -8,6 +8,8 @@ import { AlertTriangle } from 'lucide-react';
 interface AppFile {
   id: number;
   name: string;
+  icon: string;
+  description: string;
 }
 
 const ApplicationSection: React.FC = () => {
@@ -15,23 +17,28 @@ const ApplicationSection: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // If running in Electron, use the API to list files
+    // Define the apps we want to show
+    const predefinedApps: AppFile[] = [
+      { id: 1, name: "1.exe", icon: "💻", description: "System Optimizer" },
+      { id: 2, name: "2.exe", icon: "🚀", description: "Performance Booster" },
+      { id: 3, name: "3.exe", icon: "🔧", description: "System Repair" },
+      { id: 4, name: "4.exe", icon: "⚙️", description: "Advanced Configuration" }
+    ];
+    
+    // If running in Electron, check if these files actually exist
     if (window.electron) {
       const files = window.electron.listFiles('.exe');
-      const mappedFiles = files.map((name, index) => ({
-        id: index + 1,
-        name
-      }));
-      setAppFiles(mappedFiles);
+      console.log('Found exe files:', files);
+      
+      // Filter predefined apps to only include those that exist in the files directory
+      const availableApps = predefinedApps.filter(app => 
+        files.includes(app.name)
+      );
+      
+      setAppFiles(availableApps);
     } else {
-      // Fallback to mock data when not running in Electron
-      setAppFiles([
-        { id: 1, name: "1.exe" },
-        { id: 2, name: "2.exe" },
-        { id: 3, name: "3.exe" },
-        { id: 4, name: "4.exe" },
-        { id: 5, name: "5.exe" },
-      ]);
+      // Fallback to predefined apps when not running in Electron
+      setAppFiles(predefinedApps);
     }
   }, []);
 
@@ -44,7 +51,7 @@ const ApplicationSection: React.FC = () => {
       if (result.success) {
         toast({
           title: "Application Launched",
-          description: `Started ${app.name}`,
+          description: `Started ${app.description}`,
         });
       } else {
         toast({
@@ -56,7 +63,7 @@ const ApplicationSection: React.FC = () => {
     } else {
       toast({
         title: "Application Launched",
-        description: `Started ${app.name} (simulation)`,
+        description: `Started ${app.description} (simulation)`,
       });
     }
   };
@@ -64,19 +71,19 @@ const ApplicationSection: React.FC = () => {
   return (
     <Card className="glass-panel">
       <CardHeader className="glass-panel-header">
-        <CardTitle className="text-white">Applications</CardTitle>
+        <CardTitle className="text-white">System Optimization Applications</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         {appFiles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             {appFiles.map((app) => (
               <Button
                 key={app.id}
                 onClick={() => handleRunApp(app)}
                 className="minecraft-btn btn-hover-slide h-auto py-4 flex flex-col items-center space-y-2"
               >
-                <div className="text-2xl">💾</div>
-                <span>{app.name}</span>
+                <div className="text-2xl">{app.icon}</div>
+                <span>{app.description}</span>
               </Button>
             ))}
           </div>

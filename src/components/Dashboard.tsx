@@ -6,6 +6,8 @@ import BatchOptimizationSection from './BatchOptimizationSection';
 import HardwareOptimizationSection from './HardwareOptimizationSection';
 import PowerPlansSection from './PowerPlansSection';
 import SystemInfoPanel from './SystemInfoPanel';
+import ConfigMineSection from './ConfigMineSection';
+import TexturaSection from './TexturaSection';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('apps');
@@ -22,6 +24,10 @@ const Dashboard: React.FC = () => {
         return <HardwareOptimizationSection />;
       case 'power':
         return <PowerPlansSection />;
+      case 'config':
+        return <ConfigMineSection />;
+      case 'textura':
+        return <TexturaSection />;
       default:
         return <ApplicationSection />;
     }
@@ -87,6 +93,26 @@ const Dashboard: React.FC = () => {
               }`}
             >
               Power
+            </button>
+            <button
+              onClick={() => setActiveTab('config')}
+              className={`px-4 py-2 rounded-md transition-all ${
+                activeTab === 'config'
+                  ? 'bg-minecraft-green text-white'
+                  : 'bg-glass-background hover:bg-glass-hover text-gray-300'
+              }`}
+            >
+              Config
+            </button>
+            <button
+              onClick={() => setActiveTab('textura')}
+              className={`px-4 py-2 rounded-md transition-all ${
+                activeTab === 'textura'
+                  ? 'bg-minecraft-green text-white'
+                  : 'bg-glass-background hover:bg-glass-hover text-gray-300'
+              }`}
+            >
+              Textura
             </button>
           </div>
         </div>
