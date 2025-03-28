@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Terminal } from 'lucide-react';
 
 interface BatchFile {
   id: number;
@@ -12,17 +12,30 @@ interface BatchFile {
 
 const BatchOptimizationSection: React.FC = () => {
   const [batchFiles, setBatchFiles] = useState<BatchFile[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     // If running in Electron, use the API to list files
     if (window.electron) {
-      const files = window.electron.listFiles('.bat');
-      const mappedFiles = files.map((name, index) => ({
-        id: index + 1,
-        name
-      }));
-      setBatchFiles(mappedFiles);
+      try {
+        const files = window.electron.listFiles('.bat');
+        console.log('Found batch files:', files);
+        const mappedFiles = files.map((name, index) => ({
+          id: index + 1,
+          name
+        }));
+        setBatchFiles(mappedFiles);
+      } catch (error) {
+        console.error('Error listing batch files:', error);
+        toast({
+          title: "Error",
+          description: "Failed to list batch files. Check the console for details.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
     } else {
       // Fallback to mock data when not running in Electron
       setBatchFiles([
@@ -32,24 +45,34 @@ const BatchOptimizationSection: React.FC = () => {
         { id: 4, name: "4.bat" },
         { id: 5, name: "5.bat" },
       ]);
+      setLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   const handleRunBatch = (batch: BatchFile) => {
     console.log(`Running ${batch.name}`);
     
     // If running in Electron, use the API to run the batch file
     if (window.electron) {
-      const result = window.electron.runBatchFile(batch.name);
-      if (result.success) {
+      try {
+        const result = window.electron.runBatchFile(batch.name);
+        if (result.success) {
+          toast({
+            title: "Batch Script Execution",
+            description: `Started ${batch.name}`,
+          });
+        } else {
+          toast({
+            title: "Execution Failed",
+            description: result.error || `Failed to run ${batch.name}`,
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        console.error('Error running batch file:', error);
         toast({
-          title: "Batch Script Execution",
-          description: `Started ${batch.name}`,
-        });
-      } else {
-        toast({
-          title: "Execution Failed",
-          description: result.error || `Failed to run ${batch.name}`,
+          title: "Error",
+          description: `An unexpected error occurred running ${batch.name}`,
           variant: "destructive"
         });
       }
@@ -64,10 +87,17 @@ const BatchOptimizationSection: React.FC = () => {
   return (
     <Card className="glass-panel">
       <CardHeader className="glass-panel-header">
-        <CardTitle className="text-white">Batch Optimization (BAT)</CardTitle>
+        <CardTitle className="text-white flex items-center">
+          <Terminal className="mr-2" size={20} />
+          Batch Optimization (BAT)
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        {batchFiles.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-minecraft-green"></div>
+          </div>
+        ) : batchFiles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {batchFiles.map((batch) => (
               <Button

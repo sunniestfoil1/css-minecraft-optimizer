@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const { exec, execSync } = require('child_process');
 const os = require('os');
+const app = require('electron').app;
 
 // Check Windows version
 function getWindowsVersion() {
@@ -15,6 +16,24 @@ function getWindowsVersion() {
   if (major === 10 && minor === 0 && parseInt(release[2]) >= 22000) return 'Windows 11';
   if (major === 10 && minor > 0) return 'Windows 11';
   return 'Unsupported Windows Version';
+}
+
+// Get the correct path to files directory
+function getFilesPath() {
+  // In development
+  let basePath = process.cwd();
+  
+  // In production
+  if (process.env.NODE_ENV !== 'development') {
+    // Check if we're in an asar archive
+    if (process.resourcesPath) {
+      return path.join(process.resourcesPath, 'files');
+    }
+    // Fallback to app path
+    basePath = path.dirname(process.execPath);
+  }
+  
+  return path.join(basePath, 'files');
 }
 
 // Expose protected methods that allow the renderer process to use
@@ -34,7 +53,7 @@ contextBridge.exposeInMainWorld('electron', {
   // Function to run .exe files
   runExecutable: (exeName) => {
     try {
-      const filePath = path.join(process.cwd(), 'files', exeName);
+      const filePath = path.join(getFilesPath(), exeName);
       console.log(`Attempting to run: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
@@ -55,7 +74,7 @@ contextBridge.exposeInMainWorld('electron', {
   // Function to run .bat files
   runBatchFile: (batName) => {
     try {
-      const filePath = path.join(process.cwd(), 'files', batName);
+      const filePath = path.join(getFilesPath(), batName);
       console.log(`Attempting to run batch file: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
@@ -63,7 +82,7 @@ contextBridge.exposeInMainWorld('electron', {
         return { success: false, error: 'File not found' };
       }
       
-      // In a production app, this would execute the actual .bat file
+      // Execute the bat file
       console.log(`Executing ${batName}...`);
       execSync(`cmd.exe /c "${filePath}"`, { windowsHide: false });
       return { success: true };
@@ -76,7 +95,7 @@ contextBridge.exposeInMainWorld('electron', {
   // Function to run .pow (power plan) files
   runPowerPlan: (powName) => {
     try {
-      const filePath = path.join(process.cwd(), 'files', powName);
+      const filePath = path.join(getFilesPath(), powName);
       console.log(`Attempting to run power plan: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
@@ -84,8 +103,7 @@ contextBridge.exposeInMainWorld('electron', {
         return { success: false, error: 'File not found' };
       }
       
-      // For power plans, we would use powercfg.exe
-      // This is a placeholder for actual power plan functionality
+      // For power plans, use powercfg.exe
       console.log(`Activating power plan ${powName}...`);
       execSync(`powercfg /import "${filePath}"`, { windowsHide: false });
       
@@ -108,7 +126,9 @@ contextBridge.exposeInMainWorld('electron', {
   // Function to list files in the "files" directory with specific extension
   listFiles: (extension) => {
     try {
-      const filesDir = path.join(process.cwd(), 'files');
+      const filesDir = getFilesPath();
+      console.log(`Listing files in: ${filesDir}`);
+      
       // Create the directory if it doesn't exist
       if (!fs.existsSync(filesDir)) {
         fs.mkdirSync(filesDir, { recursive: true });

@@ -29,5 +29,6 @@
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "Minecraft Optimizer"
-  }
+  },
+  "asar": true
 }
