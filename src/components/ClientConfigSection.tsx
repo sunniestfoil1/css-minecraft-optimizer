@@ -13,7 +13,7 @@ interface ClientConfig {
 }
 
 const ClientConfigSection: React.FC = () => {
-  // Specific client configs with corresponding batch file names
+  // Configurações específicas de clientes com nomes de arquivos batch correspondentes
   const clientConfigs: ClientConfig[] = [
     { id: 1, name: "Badlion", icon: "🛡️", filename: "BADLION.bat" },
     { id: 2, name: "CM Client", icon: "⚔️", filename: "CM CLIENT.bat" },
@@ -23,36 +23,36 @@ const ClientConfigSection: React.FC = () => {
   const { toast } = useToast();
 
   const handleConfigureClient = (client: ClientConfig) => {
-    console.log(`Configuring ${client.name} using ${client.filename}`);
+    console.log(`Configurando ${client.name} usando ${client.filename}`);
     
-    // If running in Electron, use the API to run the batch file
+    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(client.filename);
         if (result.success) {
           toast({
-            title: "Client Configuration",
-            description: `Started configuration for ${client.name}`,
+            title: "Configuração do Cliente",
+            description: `Configuração iniciada para ${client.name}`,
           });
         } else {
           toast({
-            title: "Configuration Failed",
-            description: result.error || `Failed to configure ${client.name}`,
+            title: "Falha na Configuração",
+            description: result.error || `Falha ao configurar ${client.name}`,
             variant: "destructive"
           });
         }
       } catch (error) {
-        console.error(`Error configuring ${client.name}:`, error);
+        console.error(`Erro ao configurar ${client.name}:`, error);
         toast({
-          title: "Error",
-          description: `An unexpected error occurred configuring ${client.name}`,
+          title: "Erro",
+          description: `Ocorreu um erro inesperado ao configurar ${client.name}`,
           variant: "destructive"
         });
       }
     } else {
       toast({
-        title: "Client Configuration",
-        description: `Started configuration for ${client.name} (simulation)`,
+        title: "Configuração do Cliente",
+        description: `Configuração iniciada para ${client.name} (simulação)`,
       });
     }
   };
@@ -60,7 +60,7 @@ const ClientConfigSection: React.FC = () => {
   return (
     <Card className="glass-panel">
       <CardHeader className="glass-panel-header">
-        <CardTitle className="text-white">Client Configurations</CardTitle>
+        <CardTitle className="text-white">Configurações de Clientes</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         {clientConfigs.length > 0 ? (
@@ -85,13 +85,13 @@ const ClientConfigSection: React.FC = () => {
           <div className="p-4 bg-yellow-900/30 rounded-md border border-yellow-900/50 flex items-center">
             <AlertTriangle className="text-yellow-400 mr-2" size={20} />
             <p className="text-yellow-200 text-sm">
-              No client configuration files found in the 'files' directory.
+              Nenhum arquivo de configuração de cliente encontrado no diretório 'files'.
             </p>
           </div>
         )}
         
         <div className="mt-4 p-3 bg-blue-900/30 text-blue-200 rounded-md border border-blue-900/50 text-xs">
-          <strong>Note:</strong> These configurations will optimize your Minecraft clients for better performance.
+          <strong>Nota:</strong> Essas configurações irão otimizar seus clientes Minecraft para melhor desempenho.
         </div>
       </CardContent>
     </Card>

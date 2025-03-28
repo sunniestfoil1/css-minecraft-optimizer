@@ -10,36 +10,36 @@ const ConfigMineSection: React.FC = () => {
   const configFileName = "config_mine.bat";
 
   const handleRunConfig = () => {
-    console.log(`Running Minecraft configuration: ${configFileName}`);
+    console.log(`Executando configuração do Minecraft: ${configFileName}`);
     
-    // If running in Electron, use the API to run the batch file
+    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(configFileName);
         if (result.success) {
           toast({
-            title: "Minecraft Configuration",
-            description: "Started Minecraft configuration process",
+            title: "Configuração do Minecraft",
+            description: "Processo de configuração do Minecraft iniciado",
           });
         } else {
           toast({
-            title: "Configuration Failed",
-            description: result.error || "Failed to run configuration script",
+            title: "Falha na Configuração",
+            description: result.error || "Falha ao executar script de configuração",
             variant: "destructive"
           });
         }
       } catch (error) {
-        console.error('Error running configuration:', error);
+        console.error('Erro ao executar configuração:', error);
         toast({
-          title: "Error",
-          description: "An unexpected error occurred during configuration",
+          title: "Erro",
+          description: "Ocorreu um erro inesperado durante a configuração",
           variant: "destructive"
         });
       }
     } else {
       toast({
-        title: "Minecraft Configuration",
-        description: "Started Minecraft configuration process (simulation)",
+        title: "Configuração do Minecraft",
+        description: "Processo de configuração do Minecraft iniciado (simulação)",
       });
     }
   };
@@ -49,13 +49,13 @@ const ConfigMineSection: React.FC = () => {
       <CardHeader className="glass-panel-header">
         <CardTitle className="text-white flex items-center">
           <Settings className="mr-2" size={20} />
-          Minecraft Configuration
+          Configuração do Minecraft
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         <div className="text-center">
           <p className="text-gray-300 mb-4">
-            Apply optimized configuration settings to your Minecraft installation.
+            Aplique configurações otimizadas à sua instalação do Minecraft.
           </p>
           <Button
             onClick={handleRunConfig}
@@ -66,17 +66,17 @@ const ConfigMineSection: React.FC = () => {
             }}
           >
             <span className="text-xl mr-2">⚙️</span>
-            Apply Optimal Configuration
+            Aplicar Configuração Ideal
           </Button>
         </div>
         
         <div className="mt-6 p-4 bg-black/30 rounded-md border border-glass-border">
-          <h3 className="text-sm font-medium text-white mb-2">What This Does:</h3>
+          <h3 className="text-sm font-medium text-white mb-2">O Que Isso Faz:</h3>
           <ul className="text-xs text-gray-300 space-y-1 list-disc list-inside">
-            <li>Optimizes game settings for better performance</li>
-            <li>Adjusts rendering and graphics settings</li>
-            <li>Configures memory allocation</li>
-            <li>Improves FPS and reduces lag</li>
+            <li>Otimiza as configurações do jogo para melhor desempenho</li>
+            <li>Ajusta as configurações de renderização e gráficos</li>
+            <li>Configura alocação de memória</li>
+            <li>Melhora o FPS e reduz lag</li>
           </ul>
         </div>
       </CardContent>

@@ -16,28 +16,28 @@ const BatchOptimizationSection: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // If running in Electron, use the API to list files
+    // Se estiver rodando no Electron, use a API para listar arquivos
     if (window.electron) {
       try {
         const files = window.electron.listFiles('.bat');
-        console.log('Found batch files:', files);
+        console.log('Arquivos batch encontrados:', files);
         const mappedFiles = files.map((name, index) => ({
           id: index + 1,
           name
         }));
         setBatchFiles(mappedFiles);
       } catch (error) {
-        console.error('Error listing batch files:', error);
+        console.error('Erro ao listar arquivos batch:', error);
         toast({
-          title: "Error",
-          description: "Failed to list batch files. Check the console for details.",
+          title: "Erro",
+          description: "Falha ao listar arquivos batch. Verifique o console para detalhes.",
           variant: "destructive"
         });
       } finally {
         setLoading(false);
       }
     } else {
-      // Fallback to mock data when not running in Electron
+      // Fallback para dados fictícios quando não estiver rodando no Electron
       setBatchFiles([
         { id: 1, name: "1.bat" },
         { id: 2, name: "2.bat" },
@@ -50,36 +50,36 @@ const BatchOptimizationSection: React.FC = () => {
   }, [toast]);
 
   const handleRunBatch = (batch: BatchFile) => {
-    console.log(`Running ${batch.name}`);
+    console.log(`Executando ${batch.name}`);
     
-    // If running in Electron, use the API to run the batch file
+    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(batch.name);
         if (result.success) {
           toast({
-            title: "Batch Script Execution",
-            description: `Started ${batch.name}`,
+            title: "Execução de Script Batch",
+            description: `Iniciou ${batch.name}`,
           });
         } else {
           toast({
-            title: "Execution Failed",
-            description: result.error || `Failed to run ${batch.name}`,
+            title: "Falha na Execução",
+            description: result.error || `Falha ao executar ${batch.name}`,
             variant: "destructive"
           });
         }
       } catch (error) {
-        console.error('Error running batch file:', error);
+        console.error('Erro ao executar arquivo batch:', error);
         toast({
-          title: "Error",
-          description: `An unexpected error occurred running ${batch.name}`,
+          title: "Erro",
+          description: `Ocorreu um erro inesperado ao executar ${batch.name}`,
           variant: "destructive"
         });
       }
     } else {
       toast({
-        title: "Batch Script Execution",
-        description: `Started ${batch.name} (simulation)`,
+        title: "Execução de Script Batch",
+        description: `Iniciou ${batch.name} (simulação)`,
       });
     }
   };
@@ -89,7 +89,7 @@ const BatchOptimizationSection: React.FC = () => {
       <CardHeader className="glass-panel-header">
         <CardTitle className="text-white flex items-center">
           <Terminal className="mr-2" size={20} />
-          Batch Optimization (BAT)
+          Otimização por Batch (BAT)
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
@@ -118,26 +118,26 @@ const BatchOptimizationSection: React.FC = () => {
           <div className="p-4 bg-yellow-900/30 rounded-md border border-yellow-900/50 flex items-center">
             <AlertTriangle className="text-yellow-400 mr-2" size={20} />
             <p className="text-yellow-200 text-sm">
-              No batch files found in the 'files' directory. Add .bat files to enable optimization scripts.
+              Nenhum arquivo batch encontrado no diretório 'files'. Adicione arquivos .bat para habilitar scripts de otimização.
             </p>
           </div>
         )}
         
         <div className="mt-6 p-4 bg-black/30 rounded-md border border-glass-border">
-          <h3 className="text-sm font-medium text-white mb-2">Sample Batch Script:</h3>
+          <h3 className="text-sm font-medium text-white mb-2">Exemplo de Script Batch:</h3>
           <pre className="text-xs text-gray-300 text-left overflow-x-auto">
             @echo off<br/>
-            echo Running Minecraft optimization...<br/>
+            echo Executando otimização do Minecraft...<br/>
             echo.<br/>
-            :: Add your optimization commands here<br/>
-            echo Optimization complete!<br/>
+            :: Adicione seus comandos de otimização aqui<br/>
+            echo Otimização concluída!<br/>
             pause
           </pre>
           
           <div className="mt-3 p-2 bg-blue-900/30 text-blue-200 rounded-md text-xs">
-            <strong>Security Note:</strong> Batch files can execute system commands. 
-            Only run scripts from trusted sources. Scripts will run with the same 
-            permissions as this application.
+            <strong>Nota de Segurança:</strong> Arquivos batch podem executar comandos do sistema. 
+            Execute apenas scripts de fontes confiáveis. Os scripts serão executados com as mesmas 
+            permissões deste aplicativo.
           </div>
         </div>
       </CardContent>

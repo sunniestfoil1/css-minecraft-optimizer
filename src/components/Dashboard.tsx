@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <h1 className="text-2xl font-bold text-white mb-4 sm:mb-0">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-minecraft-green to-minecraft-diamond">
-              Minecraft Optimizer
+              Otimizador de Minecraft
             </span>
           </h1>
           
@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
                   : 'bg-glass-background hover:bg-glass-hover text-gray-300'
               }`}
             >
-              Apps
+              Aplicativos
             </button>
             <button
               onClick={() => setActiveTab('clients')}
@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
                   : 'bg-glass-background hover:bg-glass-hover text-gray-300'
               }`}
             >
-              Clients
+              Clientes
             </button>
             <button
               onClick={() => setActiveTab('batch')}
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                   : 'bg-glass-background hover:bg-glass-hover text-gray-300'
               }`}
             >
-              Power
+              Energia
             </button>
             <button
               onClick={() => setActiveTab('config')}
@@ -127,7 +127,7 @@ const Dashboard: React.FC = () => {
       
       <footer className="bg-glass-background backdrop-blur-md border-t border-glass-border p-3">
         <div className="container mx-auto text-center text-xs text-gray-500">
-          Minecraft Optimizer v1.0.0 | For Windows 10/11 Only
+          Otimizador de Minecraft v1.0.0 | Apenas para Windows 10/11
         </div>
       </footer>
     </div>

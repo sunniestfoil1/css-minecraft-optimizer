@@ -10,36 +10,36 @@ const TexturaSection: React.FC = () => {
   const texturaFileName = "TEXTURA.bat";
 
   const handleApplyTexture = () => {
-    console.log(`Applying texture pack: ${texturaFileName}`);
+    console.log(`Aplicando pacote de textura: ${texturaFileName}`);
     
-    // If running in Electron, use the API to run the batch file
+    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(texturaFileName);
         if (result.success) {
           toast({
-            title: "Texture Pack",
-            description: "Started texture pack installation",
+            title: "Pacote de Textura",
+            description: "Iniciou a instalação do pacote de textura",
           });
         } else {
           toast({
-            title: "Texture Installation Failed",
-            description: result.error || "Failed to install texture pack",
+            title: "Falha na Instalação da Textura",
+            description: result.error || "Falha ao instalar o pacote de textura",
             variant: "destructive"
           });
         }
       } catch (error) {
-        console.error('Error applying texture pack:', error);
+        console.error('Erro ao aplicar pacote de textura:', error);
         toast({
-          title: "Error",
-          description: "An unexpected error occurred installing texture pack",
+          title: "Erro",
+          description: "Ocorreu um erro inesperado ao instalar o pacote de textura",
           variant: "destructive"
         });
       }
     } else {
       toast({
-        title: "Texture Pack",
-        description: "Started texture pack installation (simulation)",
+        title: "Pacote de Textura",
+        description: "Iniciou a instalação do pacote de textura (simulação)",
       });
     }
   };
@@ -49,13 +49,13 @@ const TexturaSection: React.FC = () => {
       <CardHeader className="glass-panel-header">
         <CardTitle className="text-white flex items-center">
           <PaintBucket className="mr-2" size={20} />
-          Texture Pack Installer
+          Instalador de Pacotes de Textura
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         <div className="text-center">
           <p className="text-gray-300 mb-4">
-            Install optimized texture packs for better performance while maintaining visual quality.
+            Instale pacotes de textura otimizados para melhor desempenho mantendo a qualidade visual.
           </p>
           <Button
             onClick={handleApplyTexture}
@@ -66,17 +66,17 @@ const TexturaSection: React.FC = () => {
             }}
           >
             <span className="text-xl mr-2">🎨</span>
-            Install Optimized Textures
+            Instalar Texturas Otimizadas
           </Button>
         </div>
         
         <div className="mt-6 p-4 bg-black/30 rounded-md border border-glass-border">
-          <h3 className="text-sm font-medium text-white mb-2">Benefits:</h3>
+          <h3 className="text-sm font-medium text-white mb-2">Benefícios:</h3>
           <ul className="text-xs text-gray-300 space-y-1 list-disc list-inside">
-            <li>Lower resolution textures for better performance</li>
-            <li>Maintains visual quality and aesthetics</li>
-            <li>Reduces VRAM usage</li>
-            <li>Decreases loading times</li>
+            <li>Texturas de menor resolução para melhor desempenho</li>
+            <li>Mantém a qualidade visual e estética</li>
+            <li>Reduz o uso de VRAM</li>
+            <li>Diminui os tempos de carregamento</li>
           </ul>
         </div>
       </CardContent>

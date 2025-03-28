@@ -17,53 +17,53 @@ const ApplicationSection: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Define the apps we want to show
+    // Define os apps que queremos mostrar
     const predefinedApps: AppFile[] = [
-      { id: 1, name: "1.exe", icon: "💻", description: "System Optimizer" },
-      { id: 2, name: "2.exe", icon: "🚀", description: "Performance Booster" },
-      { id: 3, name: "3.exe", icon: "🔧", description: "System Repair" },
-      { id: 4, name: "4.exe", icon: "⚙️", description: "Advanced Configuration" }
+      { id: 1, name: "1.exe", icon: "💻", description: "Otimizador de Sistema" },
+      { id: 2, name: "2.exe", icon: "🚀", description: "Acelerador de Desempenho" },
+      { id: 3, name: "3.exe", icon: "🔧", description: "Reparo do Sistema" },
+      { id: 4, name: "4.exe", icon: "⚙️", description: "Configuração Avançada" }
     ];
     
-    // If running in Electron, check if these files actually exist
+    // Se estiver rodando no Electron, verifica se esses arquivos realmente existem
     if (window.electron) {
       const files = window.electron.listFiles('.exe');
-      console.log('Found exe files:', files);
+      console.log('Arquivos .exe encontrados:', files);
       
-      // Filter predefined apps to only include those that exist in the files directory
+      // Filtra os apps predefinidos para incluir apenas aqueles que existem no diretório de arquivos
       const availableApps = predefinedApps.filter(app => 
         files.includes(app.name)
       );
       
       setAppFiles(availableApps);
     } else {
-      // Fallback to predefined apps when not running in Electron
+      // Fallback para os apps predefinidos quando não estiver rodando no Electron
       setAppFiles(predefinedApps);
     }
   }, []);
 
   const handleRunApp = (app: AppFile) => {
-    console.log(`Launching ${app.name}`);
+    console.log(`Iniciando ${app.name}`);
     
-    // If running in Electron, use the API to run the executable
+    // Se estiver rodando no Electron, use a API para executar o executável
     if (window.electron) {
       const result = window.electron.runExecutable(app.name);
       if (result.success) {
         toast({
-          title: "Application Launched",
-          description: `Started ${app.description}`,
+          title: "Aplicativo Iniciado",
+          description: `Iniciou ${app.description}`,
         });
       } else {
         toast({
-          title: "Launch Failed",
-          description: result.error || `Failed to start ${app.name}`,
+          title: "Falha ao Iniciar",
+          description: result.error || `Falha ao iniciar ${app.name}`,
           variant: "destructive"
         });
       }
     } else {
       toast({
-        title: "Application Launched",
-        description: `Started ${app.description} (simulation)`,
+        title: "Aplicativo Iniciado",
+        description: `Iniciou ${app.description} (simulação)`,
       });
     }
   };
@@ -71,7 +71,7 @@ const ApplicationSection: React.FC = () => {
   return (
     <Card className="glass-panel">
       <CardHeader className="glass-panel-header">
-        <CardTitle className="text-white">System Optimization Applications</CardTitle>
+        <CardTitle className="text-white">Aplicativos de Otimização do Sistema</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         {appFiles.length > 0 ? (
@@ -91,14 +91,14 @@ const ApplicationSection: React.FC = () => {
           <div className="p-4 bg-yellow-900/30 rounded-md border border-yellow-900/50 flex items-center">
             <AlertTriangle className="text-yellow-400 mr-2" size={20} />
             <p className="text-yellow-200 text-sm">
-              No executable files found in the 'files' directory. Add .exe files to enable application launching.
+              Nenhum arquivo executável encontrado no diretório 'files'. Adicione arquivos .exe para habilitar o lançamento de aplicativos.
             </p>
           </div>
         )}
         
         <div className="mt-4 p-3 bg-blue-900/30 text-blue-200 rounded-md border border-blue-900/50 text-xs">
-          <strong>Security Note:</strong> Applications will run with the same permissions 
-          as this optimizer. Only run trusted programs from verified sources.
+          <strong>Nota de Segurança:</strong> Os aplicativos serão executados com as mesmas permissões 
+          que este otimizador. Execute apenas programas confiáveis de fontes verificadas.
         </div>
       </CardContent>
     </Card>

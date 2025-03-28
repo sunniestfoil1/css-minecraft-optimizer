@@ -16,7 +16,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       
-      {/* Window controls for desktop app */}
+      {/* Controles de janela para o aplicativo desktop */}
       <div className="fixed top-0 right-0 z-50 flex items-center m-2 space-x-2">
         <button 
           onClick={() => window.electron?.minimizeWindow?.()}
