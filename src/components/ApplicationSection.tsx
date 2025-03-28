@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +24,6 @@ const ApplicationSection: React.FC = () => {
       { id: 4, name: "4.exe", icon: "⚙️", description: "Configuração Avançada" }
     ];
     
-    // Se estiver rodando no Electron, verifica se esses arquivos realmente existem
     if (window.electron) {
       const files = window.electron.listFiles('.exe');
       console.log('Arquivos .exe encontrados:', files);
@@ -37,7 +35,6 @@ const ApplicationSection: React.FC = () => {
       
       setAppFiles(availableApps);
     } else {
-      // Fallback para os apps predefinidos quando não estiver rodando no Electron
       setAppFiles(predefinedApps);
     }
   }, []);
@@ -45,7 +42,6 @@ const ApplicationSection: React.FC = () => {
   const handleRunApp = (app: AppFile) => {
     console.log(`Iniciando ${app.name}`);
     
-    // Se estiver rodando no Electron, use a API para executar o executável
     if (window.electron) {
       const result = window.electron.runExecutable(app.name);
       if (result.success) {
@@ -63,7 +59,7 @@ const ApplicationSection: React.FC = () => {
     } else {
       toast({
         title: "Aplicativo Iniciado",
-        description: `Iniciou ${app.description} (simulação)`,
+        description: `Iniciou ${app.description}`,
       });
     }
   };

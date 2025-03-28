@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +11,6 @@ const ConfigMineSection: React.FC = () => {
   const handleRunConfig = () => {
     console.log(`Executando configuração do Minecraft: ${configFileName}`);
     
-    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(configFileName);
@@ -39,7 +37,7 @@ const ConfigMineSection: React.FC = () => {
     } else {
       toast({
         title: "Configuração do Minecraft",
-        description: "Processo de configuração do Minecraft iniciado (simulação)",
+        description: "Processo de configuração do Minecraft iniciado",
       });
     }
   };

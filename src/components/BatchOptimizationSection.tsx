@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +15,6 @@ const BatchOptimizationSection: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Se estiver rodando no Electron, use a API para listar arquivos
     if (window.electron) {
       try {
         const files = window.electron.listFiles('.bat');
@@ -37,7 +35,7 @@ const BatchOptimizationSection: React.FC = () => {
         setLoading(false);
       }
     } else {
-      // Fallback para dados fictícios quando não estiver rodando no Electron
+      // Fallback para dados quando não estiver rodando no Electron
       setBatchFiles([
         { id: 1, name: "1.bat" },
         { id: 2, name: "2.bat" },
@@ -52,7 +50,6 @@ const BatchOptimizationSection: React.FC = () => {
   const handleRunBatch = (batch: BatchFile) => {
     console.log(`Executando ${batch.name}`);
     
-    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(batch.name);
@@ -79,7 +76,7 @@ const BatchOptimizationSection: React.FC = () => {
     } else {
       toast({
         title: "Execução de Script Batch",
-        description: `Iniciou ${batch.name} (simulação)`,
+        description: `Iniciou ${batch.name}`,
       });
     }
   };

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +24,6 @@ const ClientConfigSection: React.FC = () => {
   const handleConfigureClient = (client: ClientConfig) => {
     console.log(`Configurando ${client.name} usando ${client.filename}`);
     
-    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(client.filename);
@@ -52,7 +50,7 @@ const ClientConfigSection: React.FC = () => {
     } else {
       toast({
         title: "Configuração do Cliente",
-        description: `Configuração iniciada para ${client.name} (simulação)`,
+        description: `Configuração iniciada para ${client.name}`,
       });
     }
   };

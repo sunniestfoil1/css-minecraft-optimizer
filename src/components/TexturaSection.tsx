@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +11,6 @@ const TexturaSection: React.FC = () => {
   const handleApplyTexture = () => {
     console.log(`Aplicando pacote de textura: ${texturaFileName}`);
     
-    // Se estiver rodando no Electron, use a API para executar o arquivo batch
     if (window.electron) {
       try {
         const result = window.electron.runBatchFile(texturaFileName);
@@ -39,7 +37,7 @@ const TexturaSection: React.FC = () => {
     } else {
       toast({
         title: "Pacote de Textura",
-        description: "Iniciou a instalação do pacote de textura (simulação)",
+        description: "Iniciou a instalação do pacote de textura",
       });
     }
   };

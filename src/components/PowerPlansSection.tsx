@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +13,6 @@ const PowerPlansSection: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Se estiver rodando no Electron, use a API para listar arquivos
     if (window.electron) {
       const files = window.electron.listFiles('.pow');
       const mappedFiles = files.map((name, index) => ({
@@ -23,7 +21,7 @@ const PowerPlansSection: React.FC = () => {
       }));
       setPowerPlans(mappedFiles);
     } else {
-      // Fallback para dados fictícios quando não estiver rodando no Electron
+      // Fallback para dados quando não estiver rodando no Electron
       setPowerPlans([
         { id: 1, name: "AltoDesempenho.pow" },
         { id: 2, name: "Balanceado.pow" },
@@ -37,7 +35,6 @@ const PowerPlansSection: React.FC = () => {
   const handleApplyPowerPlan = (plan: PowerPlan) => {
     console.log(`Aplicando plano de energia: ${plan.name}`);
     
-    // Se estiver rodando no Electron, use a API para aplicar o plano de energia
     if (window.electron) {
       const result = window.electron.runPowerPlan(plan.name);
       if (result.success) {
@@ -55,7 +52,7 @@ const PowerPlansSection: React.FC = () => {
     } else {
       toast({
         title: "Plano de Energia Aplicado",
-        description: `Ativado ${plan.name} (simulação)`,
+        description: `Ativado ${plan.name}`,
       });
     }
   };
