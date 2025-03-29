@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: './', // Importante para o Electron carregar os assets corretamente
+  base: './', // Important for Electron to load assets correctly
   server: {
     host: "::",
     port: 8080,
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined // Evita problemas com o Electron
+        manualChunks: undefined // Avoid problems with Electron
       }
     }
   }

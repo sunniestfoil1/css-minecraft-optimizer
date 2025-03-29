@@ -17,22 +17,20 @@ function getWindowsVersion() {
   return 'Versão do Windows não suportada';
 }
 
-// Get the correct path to files directory
+// Get the correct path to files directory in a standalone application
 function getFilesPath() {
-  // Em desenvolvimento
-  let basePath = process.cwd();
-  
-  // Em produção
-  if (process.env.NODE_ENV !== 'development') {
-    // Verifica se estamos em um arquivo asar
-    if (process.resourcesPath) {
-      return path.join(process.resourcesPath, 'files');
-    }
-    // Fallback para o caminho do aplicativo
-    basePath = path.dirname(process.execPath);
+  // In development mode
+  if (process.env.NODE_ENV === 'development') {
+    return path.join(process.cwd(), 'files');
   }
   
-  return path.join(basePath, 'files');
+  // In production mode (packaged app)
+  if (process.resourcesPath) {
+    return path.join(process.resourcesPath, 'files');
+  }
+  
+  // Fallback to application path
+  return path.join(path.dirname(process.execPath), 'files');
 }
 
 // Expose protected methods that allow the renderer process to use
@@ -60,7 +58,7 @@ contextBridge.exposeInMainWorld('electron', {
         return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // Executa o arquivo .exe
+      // Execute the .exe file
       console.log(`Executando ${exeName}...`);
       execSync(`"${filePath}"`, { windowsHide: false });
       return { success: true };
@@ -81,7 +79,7 @@ contextBridge.exposeInMainWorld('electron', {
         return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // Executa o arquivo .bat
+      // Execute the .bat file
       console.log(`Executando ${batName}...`);
       execSync(`cmd.exe /c "${filePath}"`, { windowsHide: false });
       return { success: true };
@@ -102,16 +100,16 @@ contextBridge.exposeInMainWorld('electron', {
         return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // Para planos de energia, use powercfg.exe
+      // For power plans, use powercfg.exe
       console.log(`Ativando plano de energia ${powName}...`);
       execSync(`powercfg /import "${filePath}"`, { windowsHide: false });
       
-      // Obtém o GUID do esquema de energia importado
+      // Get the GUID of the imported power scheme
       const output = execSync('powercfg /list').toString();
       const match = output.match(/Power Scheme GUID: ([a-f0-9-]+) +\(.*\*\)/i);
       if (match && match[1]) {
         const guid = match[1];
-        // Ativa o esquema de energia importado
+        // Activate the imported power scheme
         execSync(`powercfg /setactive ${guid}`);
       }
       
@@ -128,7 +126,7 @@ contextBridge.exposeInMainWorld('electron', {
       const filesDir = getFilesPath();
       console.log(`Listando arquivos em: ${filesDir}`);
       
-      // Cria o diretório se não existir
+      // Create directory if it doesn't exist
       if (!fs.existsSync(filesDir)) {
         fs.mkdirSync(filesDir, { recursive: true });
       }

@@ -39,7 +39,7 @@ function createWindow() {
     icon: path.join(__dirname, '../public/favicon.ico')
   });
 
-  // Carrega o arquivo HTML da aplicação
+  // Load the index.html file directly instead of serving it
   const indexPath = path.join(__dirname, '../dist/index.html');
   mainWindow.loadFile(indexPath);
 
@@ -48,12 +48,13 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
 
-  // Bloqueia a abertura de links externos no navegador padrão
+  // Handle external links safely
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    // Apenas links internos são permitidos
+    // Only allow internal links
     if (url.startsWith('file://') || url.startsWith('about:')) {
       return { action: 'allow' };
     }
+    // Block external links for security
     return { action: 'deny' };
   });
 
