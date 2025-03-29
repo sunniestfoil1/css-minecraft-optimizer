@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,9 +36,11 @@ const TexturaSection: React.FC = () => {
         });
       }
     } else {
+      console.error('API do Electron não disponível');
       toast({
-        title: "Pacote de Textura",
-        description: "Iniciou a instalação do pacote de textura",
+        title: "Erro",
+        description: "Não foi possível acessar as funcionalidades do sistema",
+        variant: "destructive"
       });
     }
   };

@@ -12,8 +12,8 @@ if (require('electron-squirrel-startup')) {
 // Check if running on Windows
 if (os.platform() !== 'win32') {
   dialog.showErrorBox(
-    'Unsupported Operating System',
-    'This application only runs on Windows 10 and Windows 11.'
+    'Sistema Operacional não Suportado',
+    'Esta aplicação funciona apenas no Windows 10 e Windows 11.'
   );
   app.quit();
 }
@@ -39,15 +39,12 @@ function createWindow() {
     icon: path.join(__dirname, '../public/favicon.ico')
   });
 
-  // Open CMD window when app starts
-  // In a real app, this would execute actual commands
-  spawn('cmd.exe', ['/c', 'echo Minecraft Optimizer is starting... && timeout /t 3']);
-
-  // Load the index.html from the renderer
+  // Define o caminho para o index.html
   const startUrl = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:5173' 
     : `file://${path.join(__dirname, '../dist/index.html')}`;
 
+  // Carrega o arquivo HTML
   mainWindow.loadURL(startUrl);
 
   // Open DevTools in development mode
@@ -55,9 +52,12 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
 
-  // Open external links in browser
+  // Bloqueia a abertura de links externos no navegador padrão
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    // Apenas links internos são permitidos
+    if (url.startsWith('file://') || url.startsWith('about:')) {
+      return { action: 'allow' };
+    }
     return { action: 'deny' };
   });
 
@@ -77,11 +77,9 @@ app.whenReady().then(() => {
   });
 });
 
-// Quit when all windows are closed, except on macOS
+// Quit when all windows are closed
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 // Handle IPC events for window controls

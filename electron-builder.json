@@ -30,5 +30,6 @@
     "createStartMenuShortcut": true,
     "shortcutName": "Otimizador de Minecraft"
   },
-  "asar": true
+  "asar": true,
+  "asarUnpack": ["**/*.{node,dll,exe,bat,pow}"]
 }
