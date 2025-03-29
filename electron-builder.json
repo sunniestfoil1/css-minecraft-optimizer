@@ -31,5 +31,6 @@
     "shortcutName": "Otimizador de Minecraft"
   },
   "asar": true,
-  "asarUnpack": ["**/*.{node,dll,exe,bat,pow}"]
+  "asarUnpack": ["**/*.{node,dll,exe,bat,pow}"],
+  "main": "electron/main.js"
 }
