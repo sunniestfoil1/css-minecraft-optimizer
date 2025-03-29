@@ -39,13 +39,9 @@ function createWindow() {
     icon: path.join(__dirname, '../public/favicon.ico')
   });
 
-  // Define o caminho para o index.html
-  const startUrl = process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:5173' 
-    : `file://${path.join(__dirname, '../dist/index.html')}`;
-
-  // Carrega o arquivo HTML
-  mainWindow.loadURL(startUrl);
+  // Carrega o arquivo HTML da aplicação
+  const indexPath = path.join(__dirname, '../dist/index.html');
+  mainWindow.loadFile(indexPath);
 
   // Open DevTools in development mode
   if (process.env.NODE_ENV === 'development') {

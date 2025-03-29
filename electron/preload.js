@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const { exec, execSync } = require('child_process');
 const os = require('os');
-const app = require('electron').app;
 
 // Check Windows version
 function getWindowsVersion() {
@@ -15,21 +14,21 @@ function getWindowsVersion() {
   if (major === 10) return 'Windows 10';
   if (major === 10 && minor === 0 && parseInt(release[2]) >= 22000) return 'Windows 11';
   if (major === 10 && minor > 0) return 'Windows 11';
-  return 'Unsupported Windows Version';
+  return 'Versão do Windows não suportada';
 }
 
 // Get the correct path to files directory
 function getFilesPath() {
-  // In development
+  // Em desenvolvimento
   let basePath = process.cwd();
   
-  // In production
+  // Em produção
   if (process.env.NODE_ENV !== 'development') {
-    // Check if we're in an asar archive
+    // Verifica se estamos em um arquivo asar
     if (process.resourcesPath) {
       return path.join(process.resourcesPath, 'files');
     }
-    // Fallback to app path
+    // Fallback para o caminho do aplicativo
     basePath = path.dirname(process.execPath);
   }
   
@@ -54,19 +53,19 @@ contextBridge.exposeInMainWorld('electron', {
   runExecutable: (exeName) => {
     try {
       const filePath = path.join(getFilesPath(), exeName);
-      console.log(`Attempting to run: ${filePath}`);
+      console.log(`Tentando executar: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
-        console.error(`File does not exist: ${filePath}`);
-        return { success: false, error: 'File not found' };
+        console.error(`Arquivo não existe: ${filePath}`);
+        return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // In a production app, this would execute the actual .exe file
-      console.log(`Executing ${exeName}...`);
+      // Executa o arquivo .exe
+      console.log(`Executando ${exeName}...`);
       execSync(`"${filePath}"`, { windowsHide: false });
       return { success: true };
     } catch (error) {
-      console.error('Error running executable:', error);
+      console.error('Erro ao executar aplicativo:', error);
       return { success: false, error: error.message };
     }
   },
@@ -75,19 +74,19 @@ contextBridge.exposeInMainWorld('electron', {
   runBatchFile: (batName) => {
     try {
       const filePath = path.join(getFilesPath(), batName);
-      console.log(`Attempting to run batch file: ${filePath}`);
+      console.log(`Tentando executar arquivo batch: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
-        console.error(`File does not exist: ${filePath}`);
-        return { success: false, error: 'File not found' };
+        console.error(`Arquivo não existe: ${filePath}`);
+        return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // Execute the bat file
-      console.log(`Executing ${batName}...`);
+      // Executa o arquivo .bat
+      console.log(`Executando ${batName}...`);
       execSync(`cmd.exe /c "${filePath}"`, { windowsHide: false });
       return { success: true };
     } catch (error) {
-      console.error('Error running batch file:', error);
+      console.error('Erro ao executar arquivo batch:', error);
       return { success: false, error: error.message };
     }
   },
@@ -96,29 +95,29 @@ contextBridge.exposeInMainWorld('electron', {
   runPowerPlan: (powName) => {
     try {
       const filePath = path.join(getFilesPath(), powName);
-      console.log(`Attempting to run power plan: ${filePath}`);
+      console.log(`Tentando aplicar plano de energia: ${filePath}`);
       
       if (!fs.existsSync(filePath)) {
-        console.error(`File does not exist: ${filePath}`);
-        return { success: false, error: 'File not found' };
+        console.error(`Arquivo não existe: ${filePath}`);
+        return { success: false, error: 'Arquivo não encontrado' };
       }
       
-      // For power plans, use powercfg.exe
-      console.log(`Activating power plan ${powName}...`);
+      // Para planos de energia, use powercfg.exe
+      console.log(`Ativando plano de energia ${powName}...`);
       execSync(`powercfg /import "${filePath}"`, { windowsHide: false });
       
-      // Get the GUID of the imported power scheme
+      // Obtém o GUID do esquema de energia importado
       const output = execSync('powercfg /list').toString();
       const match = output.match(/Power Scheme GUID: ([a-f0-9-]+) +\(.*\*\)/i);
       if (match && match[1]) {
         const guid = match[1];
-        // Activate the imported power scheme
+        // Ativa o esquema de energia importado
         execSync(`powercfg /setactive ${guid}`);
       }
       
       return { success: true };
     } catch (error) {
-      console.error('Error applying power plan:', error);
+      console.error('Erro ao aplicar plano de energia:', error);
       return { success: false, error: error.message };
     }
   },
@@ -127,9 +126,9 @@ contextBridge.exposeInMainWorld('electron', {
   listFiles: (extension) => {
     try {
       const filesDir = getFilesPath();
-      console.log(`Listing files in: ${filesDir}`);
+      console.log(`Listando arquivos em: ${filesDir}`);
       
-      // Create the directory if it doesn't exist
+      // Cria o diretório se não existir
       if (!fs.existsSync(filesDir)) {
         fs.mkdirSync(filesDir, { recursive: true });
       }
@@ -137,7 +136,7 @@ contextBridge.exposeInMainWorld('electron', {
       const files = fs.readdirSync(filesDir);
       return files.filter(file => file.endsWith(extension));
     } catch (error) {
-      console.error('Error listing files:', error);
+      console.error('Erro ao listar arquivos:', error);
       return [];
     }
   },
